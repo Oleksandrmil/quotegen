@@ -25,7 +25,7 @@ class ProposalRequest(BaseModel):
       amount_cad: float
 @app.get("/")
 def read_root():
-return FileResponse("index.html")
+      return FileResponse("index.html")
 @app.post("/api/generate-proposal")
 def generate(req: ProposalRequest, db: Session = Depends(get_db)):
 if not req.client_name or not req.service_type or req.amount_cad <= 0:
