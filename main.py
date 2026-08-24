@@ -14,11 +14,11 @@ allow_methods=["*"],
 allow_headers=["*"],
 )
 def get_db():
-      try:
       db = database.SessionLocal()
-          yield db
+      try:
+            yield db
       finally:
-          db.close()
+            db.close()
 class ProposalRequest(BaseModel):
       client_name: str
       service_type: str
