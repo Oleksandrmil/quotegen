@@ -36,28 +36,35 @@
   </div>
 
   <script>
-    document.getElementById('proposalForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
+    const form = document.getElementById('proposalForm');
+    
+    if (form) {
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const payload = {
+                client_name: document.getElementById('clientName').value,
+                service_type: document.getElementById('serviceType').value,
+                amount_cad: parseFloat(document.getElementById('amountCad').value)
+            };
 
-      const payload = {
-        client_name: document.getElementById('clientName').value,
-        service_type: document.getElementById('serviceType').value,
-        amount_cad: parseFloat(document.getElementById('amountCad').value)
-      };
+            try {
+                const res = await fetch('/api/generate-proposal', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
 
-      const res = await fetch('/api/generate-proposal', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-      });
+                if (!res.ok) throw new Error('Server error');
 
-      if (res.ok) {
-        const data = await res.json();
-        document.getElementById('proposalOutput').value = data.proposal_text;
-        document.getElementById('result').classList.remove('hidden');
-      } else {
-        alert('Error generating proposal');
-      }
-    });
+                const data = await res.json();
+                document.getElementById('proposalOutput').value = data.proposal_text;
+                document.getElementById('result').classList.remove('hidden');
+            } catch (err) {
+                alert('Error generating proposal: ' + err.message);
+            }
+        });
+    }
   </script>
 </body>
 </html>
