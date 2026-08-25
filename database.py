@@ -12,13 +12,13 @@ Base = declarative_base()
 class Proposal(Base):
   __tablename__ = "proposals"
   
-    id = Column(Integer, primary_key=True, index=True)
-    client_name = Column(String, index=True)
-    service_type = Column(String)
-    amount_cad = Column(Float)
-    tax_cad = Column(Float)
-    total_cad = Column(Float)
-    proposal_text = Column(String)
-    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+  id = Column(Integer, primary_key=True, index=True)
+  client_name = Column(String, index=True)
+  service_type = Column(String)
+  amount_cad = Column(Float)
+  tax_cad = Column(Float)
+  total_cad = Column(Float)
+  proposal_text = Column(String)
+  created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
 Base.metadata.create_all(bind=engine)
