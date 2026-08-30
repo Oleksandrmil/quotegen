@@ -1,4 +1,84 @@
-proposal_text;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QuoteGen Canada</title>
+<script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+</head>
+<body class="bg-slate-900 text-white min-h-screen p-4 flex justify-center items-start">
+<div class="w-full max-w-lg space-y-6 my-6">
+<div class="bg-slate-800 p-6 rounded-xl shadow-xl border border-slate-700">
+<h1 class="text-2xl font-bold text-emerald-400 mb-6 text-center">QuoteGen.ca</h1>
+<form id="proposalForm" class="space-y-4">
+<div>
+<label class="block text-sm font-medium mb-1 text-slate-300">Client Name</label>
+<input type="text" id="clientName" placeholder="John Doe" required class="w-full p-2.5 rounded bg-slate-700 border border-slate-600 text-white focus:outline-none focus:border-emerald-400">
+</div>
+<div>
+<label class="block text-sm font-medium mb-1 text-slate-300">Service Type</label>
+<input type="text" id="serviceType" placeholder="Web" required class="w-full p-2.5 rounded bg-slate-700 border border-slate-600 text-white focus:outline-none focus:border-emerald-400">
+</div>
+<div>
+<label class="block text-sm font-medium mb-1 text-slate-300">Amount CAD</label>
+<input type="number" id="amountCad" step="0.01" placeholder="1000" required class="w-full p-2.5 rounded bg-slate-700 border border-slate-600 text-white focus:outline-none focus:border-emerald-400">
+</div>
+<button type="submit" class="w-full bg-emerald-400 hover:bg-emerald-500 text-slate-900 font-bold py-2.5 rounded transition">
+Generate Proposal
+</button>
+</form>
+<div id="result" class="mt-6 hidden">
+<h2 class="text-sm font-semibold text-slate-400 mb-2">Generated Result:</h2>
+<textarea id="proposalOutput" rows="8" readonly class="w-full p-3 rounded bg-slate-900 border border-slate-700 text-emerald-400 text-sm font-mono focus:outline-none"></textarea>
+</div>
+</div>
+<div class="bg-slate-800 p-6 rounded-xl shadow-xl border border-slate-700">
+<h2 class="text-xl font-bold text-emerald-400 mb-4 text-center">Work Schedule & Visits</h2>
+<form id="scheduleForm" class="space-y-3 mb-6 bg-slate-900 p-4 rounded-lg border border-slate-700">
+<div class="grid grid-cols-2 gap-2">
+<div>
+<label class="block text-xs font-medium text-slate-400 mb-1">Date</label>
+<input type="date" id="visitDate" required class="w-full p-2 text-sm rounded bg-slate-800 border border-slate-600 text-white focus:outline-none focus:border-emerald-400">
+</div>
+<div>
+<label class="block text-xs font-medium text-slate-400 mb-1">Time</label>
+<input type="time" id="visitTime" required class="w-full p-2 text-sm rounded bg-slate-800 border border-slate-600 text-white focus:outline-none focus:border-emerald-400">
+</div>
+</div>
+<div>
+<label class="block text-xs font-medium text-slate-400 mb-1">Location / Task Details</label>
+<input type="text" id="visitTask" placeholder="e.g. Visit site at 7:00 AM" required class="w-full p-2 text-sm rounded bg-slate-800 border border-slate-600 text-white focus:outline-none focus:border-emerald-400">
+</div>
+<button type="submit" class="w-full bg-slate-700 hover:bg-slate-600 text-emerald-400 font-semibold py-2 rounded text-sm transition">
++ Add to Schedule
+</button>
+</form>
+<div>
+<h3 class="text-xs uppercase font-bold text-slate-400 tracking-wider mb-2">Upcoming Visits:</h3>
+<ul id="scheduleList" class="space-y-2 max-h-60 overflow-y-auto pr-1">
+<li class="text-slate-500 text-sm italic text-center py-2">No visits scheduled yet.</li>
+</ul>
+</div>
+</div>
+</div>
+<script>
+document.getElementById('proposalForm').addEventListener('submit', async function(e) {
+e.preventDefault();
+const payload = {
+client_name: document.getElementById('clientName').value,
+service_type: document.getElementById('serviceType').value,
+amount_cad: parseFloat(document.getElementById('amountCad').value)
+};
+try {
+const res = await fetch('/api/generate-proposal', {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify(payload)
+});
+if (res.ok) {
+const data = await res.json();
+document.getElementById('proposalOutput').value = data.
+  proposal_text;
 document.getElementById('result').classList.remove('hidden');
 } else {
 const errData = await res.json();
