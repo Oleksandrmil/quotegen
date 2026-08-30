@@ -1,12 +1,7 @@
-5 text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg border border-slate-700 transition">Copy Text</button>
-            </div>
-        </div>
+<textarea id="proposalOutput" class="output-box" readonly placeholder="Your generated proposal will appear here..."></textarea>
+    </div>
 
-        <div class="flex-1 bg-slate-950 border border-slate-800 rounded-xl p-6 relative flex flex-col">
-            <textarea id="proposalOutput" readonly placeholder="Your generated proposal text will appear here in high-contrast formatted text..." class="w-full h-full bg-transparent text-slate-200 text-sm font-mono leading-relaxed resize-none focus:outline-none placeholder-slate-600"></textarea>
-        </div>
-    </section>
-</main>
+</div>
 
 <script>
     document.getElementById('proposalForm').addEventListener('submit', async function(e) {
@@ -32,7 +27,7 @@
                 alert('Error generating proposal');
             }
         } catch (err) {
-            alert('Connection error');
+            alert('Server connection error');
         }
     });
 
@@ -40,7 +35,7 @@
         const textarea = document.getElementById('proposalOutput');
         if (textarea.value) {
             navigator.clipboard.writeText(textarea.value);
-            alert('Proposal copied to clipboard!');
+            alert('Copied to clipboard!');
         }
     });
 </script>
