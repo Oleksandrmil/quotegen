@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>QuoteGen Canada</title>
-<script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-900 text-white min-h-screen p-4 flex justify-center items-start">
 <div class="w-full max-w-lg space-y-6 my-6">
@@ -97,8 +97,7 @@ list.innerHTML = '<li class="text-slate-500 text-sm italic text-center py-2">No 
 return;
 }
 visits.sort((a, b) => (a.date + a.time) > (b.date + b.time) ? 1 : -1);
-list.innerHTML = visits.map((v, index) => ⁠<li class="bg-slate-900 border border-slate-700 p-3 rounded-lg flex justify-between items-center text-sm"> <div> <div class="font-bold text-emerald-400">📅 ${v.date} at ${v.time}</div> <div class="text-slate-300 mt-0.5">${v.task}</div> </div> <button onclick="deleteVisit(${index})" class="text-rose-400 hover:text-rose-300 font-bold px-2 py-1 text-xs bg-slate-800 rounded"> ✕ </button> </li>⁠).join('');
-}
+list.innerHTML = visits.map((v, index) => ⁠<li class="bg-slate-900 border border-slate-700 p-3 rounded-lg flex justify-between items-center text-sm"><div><div class="font-bold text-emerald-400">📅 ${v.date} at ${v.time}</div><div class="text-slate-300 mt-0.5">${v.task}</div></div><button onclick="deleteVisit(${index})" class="text-rose-400 hover:text-rose-300 font-bold px-2 py-1 text-xs bg-slate-800 rounded">✕</button></li>⁠).join('');
 document.getElementById('scheduleForm').addEventListener('submit', function(e) {
 e.preventDefault();
 const date = document.getElementById('visitDate').value;
