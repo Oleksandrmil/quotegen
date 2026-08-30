@@ -1,29 +1,12 @@
-<div class="bg-slate-800 p-6 rounded-xl shadow-xl w-full max-w-md border border-slate-700">
-    <h1 class="text-2xl font-bold text-emerald-400 mb-6 text-center">QuoteGen.ca</h1>
-    
-    <form id="proposalForm" class="space-y-4">
-        <div>
-            <label class="block text-sm font-medium mb-1 text-slate-300">Client Name</label>
-            <input type="text" id="clientName" required class="w-full p-2.5 rounded bg-slate-700 border border-slate-600 text-white focus:outline-none focus:border-emerald-400">
+5 text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg border border-slate-700 transition">Copy Text</button>
+            </div>
         </div>
-        <div>
-            <label class="block text-sm font-medium mb-1 text-slate-300">Service Type</label>
-            <input type="text" id="serviceType" required class="w-full p-2.5 rounded bg-slate-700 border border-slate-600 text-white focus:outline-none focus:border-emerald-400">
-        </div>
-        <div>
-            <label class="block text-sm font-medium mb-1 text-slate-300">Amount CAD</label>
-            <input type="number" id="amountCad" step="0.01" required class="w-full p-2.5 rounded bg-slate-700 border border-slate-600 text-white focus:outline-none focus:border-emerald-400">
-        </div>
-        <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-900 font-bold py-2.5 rounded transition">
-            Generate Proposal
-        </button>
-    </form>
 
-    <div id="result" class="mt-6 hidden">
-        <h2 class="text-sm font-semibold text-slate-400 mb-2">Generated Result:</h2>
-        <textarea id="proposalOutput" rows="8" readonly class="w-full p-3 rounded bg-slate-900 border border-slate-700 text-emerald-300 text-sm font-mono focus:outline-none"></textarea>
-    </div>
-</div>
+        <div class="flex-1 bg-slate-950 border border-slate-800 rounded-xl p-6 relative flex flex-col">
+            <textarea id="proposalOutput" readonly placeholder="Your generated proposal text will appear here in high-contrast formatted text..." class="w-full h-full bg-transparent text-slate-200 text-sm font-mono leading-relaxed resize-none focus:outline-none placeholder-slate-600"></textarea>
+        </div>
+    </section>
+</main>
 
 <script>
     document.getElementById('proposalForm').addEventListener('submit', async function(e) {
@@ -35,19 +18,29 @@
             amount_cad: parseFloat(document.getElementById('amountCad').value)
         };
 
-        const res = await fetch('/api/generate-proposal', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
+        try {
+            const res = await fetch('/api/generate-proposal', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
 
-        if (res.ok) {
-            const data = await res.json();
-            document.getElementById('proposalOutput').value = data.proposal_text;
-            document.getElementById('result').classList.remove('hidden');
-        } else {
-            const errData = await res.json();
-            alert('Error: ' + JSON.stringify(errData.detail || errData));
+            if (res.ok) {
+                const data = await res.json();
+                document.getElementById('proposalOutput').value = data.proposal_text;
+            } else {
+                alert('Error generating proposal');
+            }
+        } catch (err) {
+            alert('Connection error');
+        }
+    });
+
+    document.getElementById('copyBtn').addEventListener('click', function() {
+        const textarea = document.getElementById('proposalOutput');
+        if (textarea.value) {
+            navigator.clipboard.writeText(textarea.value);
+            alert('Proposal copied to clipboard!');
         }
     });
 </script>
