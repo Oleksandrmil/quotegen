@@ -1,28 +1,54 @@
-navigator.clipboard.writeText(textarea.value);
-            alert('Copied to clipboard!');
+getElementById('proposalForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const payload = {
+            client_name: document.getElementById('clientName').value,
+            service_type: document.getElementById('serviceType').value,
+            amount_cad: parseFloat(document.getElementById('amountCad').value)
+        };
+
+        try {
+            const res = await fetch('/api/generate-proposal', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                document.getElementById('proposalOutput').value = data.proposal_text;
+                document.getElementById('result').classList.remove('hidden');
+            } else {
+                const errData = await res.json();
+                alert('Error: ' + JSON.stringify(errData.detail || errData));
+            }
+        } catch (err) {
+            alert('Server connection error');
         }
     });
 
-    // --- 2. Логика Графика и Выездов ---
-    let visits = JSON.parse(localStorage.getItem('app_visits') || '[]');
+    // --- Логика Календаря и Графика ---
+    let visits = JSON.parse(localStorage.getItem('my_visits') || '[]');
 
     function renderVisits() {
-        const container = document.getElementById('scheduleList');
+        const list = document.getElementById('scheduleList');
         if (visits.length === 0) {
-            container.innerHTML = '<div style="color: #64748b; font-size: 0.8rem; text-align: center; padding: 1rem;">No visits scheduled yet.</div>';
+            list.innerHTML = '<li class="text-slate-500 text-sm italic text-center py-2">No visits scheduled yet.</li>';
             return;
         }
 
         visits.sort((a, b) => (a.date + a.time) > (b.date + b.time) ? 1 : -1);
 
-        container.innerHTML = visits.map((v, i) => `
-            <div class="visit-item">
+        list.innerHTML = visits.map((v, index) => `
+            <li class="bg-slate-900 border border-slate-700 p-3 rounded-lg flex justify-between items-center text-sm">
                 <div>
-                    <div class="visit-date">📅 ${v.date} at ${v.time}</div>
-                    <div class="visit-task">${v.task}</div>
+                    <div class="font-bold text-emerald-400">📅 ${v.date} at ${v.time}</div>
+                    <div class="text-slate-300 mt-0.5">${v.task}</div>
                 </div>
-                <button class="btn-del" onclick="deleteVisit(${i})">✕</button>
-            </div>
+                <button onclick="deleteVisit(${index})" class="text-rose-400 hover:text-rose-300 font-bold px-2 py-1 text-xs bg-slate-800 rounded">
+                    ✕
+                </button>
+            </li>
         `).join('');
     }
 
@@ -33,15 +59,15 @@ navigator.clipboard.writeText(textarea.value);
         const task = document.getElementById('visitTask').value;
 
         visits.push({ date, time, task });
-        localStorage.setItem('app_visits', JSON.stringify(visits));
+        localStorage.setItem('my_visits', JSON.stringify(visits));
         
         document.getElementById('visitTask').value = '';
         renderVisits();
     });
 
-    function deleteVisit(i) {
-        visits.splice(i, 1);
-        localStorage.setItem('app_visits', JSON.stringify(visits));
+    function deleteVisit(index) {
+        visits.splice(index, 1);
+        localStorage.setItem('my_visits', JSON.stringify(visits));
         renderVisits();
     }
 
