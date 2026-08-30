@@ -1,8 +1,4 @@
-getElementById('proposalForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const payload = {
-            client_name: document.getElementById('clientName').value,
+client_name: document.getElementById('clientName').value,
             service_type: document.getElementById('serviceType').value,
             amount_cad: parseFloat(document.getElementById('amountCad').value)
         };
@@ -27,7 +23,6 @@ getElementById('proposalForm').addEventListener('submit', async function(e) {
         }
     });
 
-    // --- Логика Календаря и Графика ---
     let visits = JSON.parse(localStorage.getItem('my_visits') || '[]');
 
     function renderVisits() {
